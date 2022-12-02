@@ -286,7 +286,7 @@ int main() {
         data[i] = stoi(regex_replace(arr[i], regex("/"), ""));
     }
 
-    cout << "퀵 정렬 시작..." << endl;
+    cout << "Start quick sort..." << endl;
     int quickSortData[MAX_NUMBER]; // 다른 정렬에도 사용하므로 data 배열을 직접 사용하지 않고 새로운 배열 선언하여 사용
     for (int i = 0; i < dataSize; i++) {
         quickSortData[i] = data[i];
@@ -295,12 +295,12 @@ int main() {
 
     fileWrite("..\\result\\QuickSortResult.txt", quickSortData, dataSize);
 
-    cout << "퀵 정렬 끝" << endl;
-    cout << "비교 횟수: " << ::compareCount << endl << endl;
+    cout << "End quick sort" << endl;
+    cout << "Compare count: " << ::compareCount << endl << endl;
     ::compareCount = 0;
 
     // counting sort
-    cout << "계수 정렬 시작..." << endl;
+    cout << "Start counting sort..." << endl;
     int countingSortData[MAX_NUMBER]; // data 배열을 정렬하여 countingSortData배열에 저장
 
     /*
@@ -316,8 +316,9 @@ int main() {
 
     fileWrite("..\\result\\CountingSortResult.txt", countingSortData, dataSize);
 
-    cout << "계수 정렬 끝" << endl;
-    cout << "비교 횟수: " << ::compareCount + ::visitCount << endl << endl;
+    cout << "End counting sort" << endl;
+    // 삽입 정렬에서의 비교 횟수(compareCount) + 계수 정렬에서의 새로운 배열을 생성할 때 데이터를 순회한 횟수(visitCount)
+    cout << "Compare count: " << ::compareCount + ::visitCount << endl << endl;
     ::compareCount = 0;
 
     return 0;
