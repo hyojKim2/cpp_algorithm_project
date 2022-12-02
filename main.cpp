@@ -180,7 +180,7 @@ void CountSort(int data[], int start, int end, int result[], int k, char mode = 
 
         // 각 키의 개수 저장
         for (j = 0; j < n; j++) {
-            // A[j] = 2022112313 형식
+            // data[j] = 2022112313 형식
             int year = data[j] / 1000000;
             N[year - BASE_YEAR] += 1;
             ::visitCount++;
@@ -193,8 +193,8 @@ void CountSort(int data[], int start, int end, int result[], int k, char mode = 
             ::visitCount++;
         }
 
-        // 정렬 결과를 배열 B에 저장
-        // B가 year순으로 정렬된 배열임
+        // 정렬 결과를 result배열에 저장
+        // result가 year순으로 정렬된 배열임
         for (j = n - 1; j >= 0; j--) {
             int year = data[j] / 1000000;
             result[N[year - BASE_YEAR] - 1] = data[j];
@@ -221,9 +221,10 @@ void CountSort(int data[], int start, int end, int result[], int k, char mode = 
         delete[] temp;
     }
     else if (mode == 'm') {
+        // N[0]은 사용 x, N[1]이 1월 의미
         // 각 키의 개수 저장
         for (j = start; j <= end; j++) {
-            // A[j] = 2022112313 형식
+            // data[j] = 2022112313 형식
             int month = (data[j] % 1000000) / 10000;
             N[month] += 1;
             ::visitCount++;
