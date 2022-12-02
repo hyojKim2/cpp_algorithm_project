@@ -150,7 +150,7 @@ void quick_sort(int list[], int left, int right) {
 	}
 }
 
-void CountSort(int data[], int start, int end, int result[], int k, char mode) {
+void CountSort(int data[], int start, int end, int result[], int k, char mode = 'y') {
 	// data: 정렬할 배열
 	// result: 정렬된 결과 배열
 	// start: 시작 index
@@ -169,6 +169,7 @@ void CountSort(int data[], int start, int end, int result[], int k, char mode) {
 	for (i = 0; i < k; i++)
 		N[i] = 0;
 
+    // year 순으로 정렬
 	if (mode == 'y') {
 		// 각 키의 개수 저장
 		for (j = 0; j < n; j++) {
