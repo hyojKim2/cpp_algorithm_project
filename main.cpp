@@ -107,103 +107,154 @@ void radix_sort(string list[], int n, char dType) {
 
 // quick 정렬
 void swap(int* a, int* b) {
-	int temp = *a;
-	*a = *b;
-	*b = temp;
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 int partition(int list[], int left, int right) {
-	int pivot;
-	int low, high;
+    int pivot;
+    int low, high;
 
-	low = left;
-	high = right + 1;
-	pivot = list[left];
+    low = left;
+    high = right + 1;
+    pivot = list[left];
 
-	do {
-		do {
-			low++;
-			::compareCount++;
-		} while (low <= right && list[low] < pivot);
+    do {
+        do {
+            low++;
+            ::compareCount++;
+        } while (low <= right && list[low] < pivot);
 
-		do {
-			high--;
-			::compareCount++;
-		} while (high >= left && list[high] > pivot);
+        do {
+            high--;
+            ::compareCount++;
+        } while (high >= left && list[high] > pivot);
 
-		if (low < high) {
-			swap(&list[low], &list[high]);
-		}
-	} while (low < high);
+        if (low < high) {
+            swap(&list[low], &list[high]);
+        }
+    } while (low < high);
 
-	swap(&list[left], &list[high]);
+    swap(&list[left], &list[high]);
 
-	return high;
+    return high;
 }
 
 void quick_sort(int list[], int left, int right) {
-	if (left < right) {
-		int q = partition(list, left, right); // q: 피벗의 위치
+    if (left < right) {
+        int q = partition(list, left, right); // q: 피벗의 위치
 
-		quick_sort(list, left, q - 1);
-		quick_sort(list, q + 1, right);
-	}
+        quick_sort(list, left, q - 1);
+        quick_sort(list, q + 1, right);
+    }
 }
 
+void insertion_sort(int list[], int start, int end);
 void CountSort(int data[], int start, int end, int result[], int k, char mode = 'y') {
-	// data: 정렬할 배열
-	// result: 정렬된 결과 배열
-	// start: 시작 index
+    // data: 정렬할 배열
+    // result: 정렬된 결과 배열
+    // start: 시작 index
     // end: 마지막 index
-	// k: 값의 변화 범위
+    // k: 값의 변화 범위
 
-	if (start == end) {
-		return;
-	}
+    if (start == end) {
+        return;
+    }
 
-	int n = end - start + 1;
-	int i, j;
-	// N: 범위내의 각 숫자가 나타나는 횟수를 위한 배열
-	int* N = new int[k];
+    int n = end - start + 1;
+    int i, j;
+    // N: 범위내의 각 숫자가 나타나는 횟수를 위한 배열
+    int* N = new int[k];
 
-	for (i = 0; i < k; i++)
-		N[i] = 0;
+    for (i = 0; i < k; i++)
+        N[i] = 0;
 
     // year 순으로 정렬
-	if (mode == 'y') {
-		// 각 키의 개수 저장
-		for (j = 0; j < n; j++) {
-			// data[j] = 2022112313 형식
-			int year = data[j] / 1000000;
-			N[year - BASE_YEAR] += 1;
-			::visitCount++;
-		}
+    if (mode == 'y') {
+        // year 개수 저장 위해 year_N배열 선언
+        int* year_N = new int[k];
+        for (int i = 0; i < k; i++) {
+            year_N[i] = 0;
+        }
 
-		// 각 키의 누적 합 저장
-		for (i = 1; i < k; i++) {
-			N[i] += N[i - 1];
-			::visitCount++;
-		}
+        // 각 키의 개수 저장
+        for (j = 0; j < n; j++) {
+            // A[j] = 2022112313 형식
+            int year = data[j] / 1000000;
+            N[year - BASE_YEAR] += 1;
+            ::visitCount++;
+        }
 
-		// 정렬 결과를 result배열에 저장
-		// result가 year순으로 정렬된 배열임
-		for (j = n - 1; j >= 0; j--) {
-			int year = data[j] / 1000000;
-			result[N[year - BASE_YEAR] - 1] = data[j];
-			N[year - BASE_YEAR] -= 1;
-		}
-	}
-	delete[](N);
+        // 각 키의 누적 합 저장
+        for (i = 1; i < k; i++) {
+            N[i] += N[i - 1];
+            year_N[i] = N[i];
+            ::visitCount++;
+        }
+
+        // 정렬 결과를 배열 B에 저장
+        // B가 year순으로 정렬된 배열임
+        for (j = n - 1; j >= 0; j--) {
+            int year = data[j] / 1000000;
+            result[N[year - BASE_YEAR] - 1] = data[j];
+            N[year - BASE_YEAR] -= 1;
+            ::visitCount++;
+        }
+
+        // year 단위로만 정렬된 결과 잠시 저장할 배열
+        int* temp = new int[n];
+        for (int i = 0; i < n; i++) {
+            temp[i] = result[i];
+        }
+
+        // month에 대해 계수 정렬
+        int count = 0;
+        for (i = 0; i < k; i++) {
+            if (year_N[i] != count) {
+                // A, B 배열 저장 위치?
+                CountSort(temp, count, year_N[i] - 1, result, 12 + 1, 'm');
+                count = year_N[i];
+                ::visitCount++;
+            }
+        }
+        delete[] year_N;
+        delete[] temp;
+    }
+    else if (mode == 'm') {
+        // 각 키의 개수 저장
+        for (j = start; j <= end; j++) {
+            // A[j] = 2022112313 형식
+            int month = (data[j] % 1000000) / 10000;
+            N[month] += 1;
+            ::visitCount++;
+        }
+
+        // 각 키의 누적 합 저장
+        for (i = 1; i < k; i++) {
+            N[i] += N[i - 1];
+            ::visitCount++;
+        }
+
+        // 정렬 결과를 배열 B에 저장
+        for (j = end; j >= start; j--) {
+            int month = (data[j] % 1000000) / 10000;
+            result[start + N[month] - 1] = data[j];
+            N[month] -= 1;
+            ::visitCount++;
+        }
+    }
+    delete[](N);
 }
 
 // 삽입 정렬
-void insertion_sort(int list[], int n) {
+void insertion_sort(int list[], int start, int end) {
     int i, j, key;
 
-    for (i = 1; i < n; i++) {
+    for (i = start + 1; i <= end; i++) {
         key = list[i];
 
-        for (j = i - 1; j >= 0 && list[j] > key; j--) {
+        for (j = i - 1; j >= start && list[j] > key; j--) {
             ::compareCount++;
             list[j + 1] = list[j];
         }
@@ -265,7 +316,8 @@ void fileWrite(string name, int arr[], int n) {
 
 int main() {
     string arr[MAX_NUMBER];
-    int n = fileRead("..\\data\\data.txt", arr);
+    // int n = fileRead("..\\data\\data.txt", arr); // 100개 데이터
+    int n = fileRead("..\\data\\data2.txt", arr); // 1000개 데이터
 
     radix_sort(arr, n, 'h');
     radix_sort(arr, n, 'd');
@@ -280,7 +332,9 @@ int main() {
 
     // quick sort
     int data[10000];
-    int dataSize = fileRead("..\\data\\data.txt", arr);
+    // int n = fileRead("..\\data\\data.txt", arr); // 100개 데이터
+    int dataSize = fileRead("..\\data\\data2.txt", arr); // 1000개 데이터
+
     // yyyy/mm/dd/hh -> 숫자로
     for (int i = 0; i < dataSize; i++) {
         data[i] = stoi(regex_replace(arr[i], regex("/"), ""));
@@ -301,18 +355,18 @@ int main() {
 
     // counting sort
     cout << "Start counting sort..." << endl;
-    int countingSortData[MAX_NUMBER]; // data 배열을 정렬하여 countingSortData배열에 저장
+    int countingSortData[MAX_NUMBER];
 
     /*
         계수 정렬 후 삽입 정렬
-        먼저, 계수 정렬로 데이터들을 연도 기준으로 거의 정리 -> 그 다음 삽입 정렬 사용
+        먼저, 계수 정렬로 데이터들을 연도, 월 기준으로 거의 정리 -> 그 다음 삽입 정렬 사용
         데이터들이 거의 정렬된 상태에서는 삽입 정렬 사용 유리
         (삽입 정렬은 최악 N^2 이지만, 자료가 이미 정렬된 상태에서는 시간복잡도 N임)
-        (계수 정렬로 연도, 월, 일, 시간 각각 전부 정렬하면 매우 많은 비교횟수와 공간이 필요)
+        (계수 정렬로 연도, 월, 일, 시간 각각 전부 정렬하면 매우 많은 비교횟수와 공간이 필요하고 이는 데이터가 많아질수록 더 많아짐)
         계수 정렬과 삽입 정렬을 같이 사용하면 퀵 정렬보다 더 적은 비교 횟수가 나오는 것을 볼 수 있음
     */
-    CountSort(data, 0, dataSize - 1, countingSortData, 100, 'y');
-    insertion_sort(countingSortData, dataSize);
+    CountSort(data, 0, dataSize - 1, countingSortData, 100, 'y'); // data 배열을 정렬하여 countingSortData배열에 저장
+    insertion_sort(countingSortData, 0, dataSize - 1); // 연도, 월 기준으로만 정렬된 countingSortData배열을 다시 정렬
 
     fileWrite("..\\result\\CountingSortResult.txt", countingSortData, dataSize);
 
