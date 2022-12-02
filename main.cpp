@@ -105,7 +105,7 @@ void radix_sort(string list[], int n, char dType) {
     }
 }
 
-// quick Á¤·Ä
+// quick ì •ë ¬
 void swap(int* a, int* b) {
     int temp = *a;
     *a = *b;
@@ -143,7 +143,7 @@ int partition(int list[], int left, int right) {
 
 void quick_sort(int list[], int left, int right) {
     if (left < right) {
-        int q = partition(list, left, right); // q: ÇÇ¹şÀÇ À§Ä¡
+        int q = partition(list, left, right); // q: í”¼ë²—ì˜ ìœ„ì¹˜
 
         quick_sort(list, left, q - 1);
         quick_sort(list, q + 1, right);
@@ -152,11 +152,11 @@ void quick_sort(int list[], int left, int right) {
 
 void insertion_sort(int list[], int start, int end);
 void CountSort(int data[], int start, int end, int result[], int k, char mode = 'y') {
-    // data: Á¤·ÄÇÒ ¹è¿­
-    // result: Á¤·ÄµÈ °á°ú ¹è¿­
-    // start: ½ÃÀÛ index
-    // end: ¸¶Áö¸· index
-    // k: °ªÀÇ º¯È­ ¹üÀ§
+    // data: ì •ë ¬í•  ë°°ì—´
+    // result: ì •ë ¬ëœ ê²°ê³¼ ë°°ì—´
+    // start: ì‹œì‘ index
+    // end: ë§ˆì§€ë§‰ index
+    // k: ê°’ì˜ ë³€í™” ë²”ìœ„
 
     if (start == end) {
         return;
@@ -164,37 +164,37 @@ void CountSort(int data[], int start, int end, int result[], int k, char mode = 
 
     int n = end - start + 1;
     int i, j;
-    // N: ¹üÀ§³»ÀÇ °¢ ¼ıÀÚ°¡ ³ªÅ¸³ª´Â È½¼ö¸¦ À§ÇÑ ¹è¿­
+    // N: ë²”ìœ„ë‚´ì˜ ê° ìˆ«ìê°€ ë‚˜íƒ€ë‚˜ëŠ” íšŸìˆ˜ë¥¼ ìœ„í•œ ë°°ì—´
     int* N = new int[k];
 
     for (i = 0; i < k; i++)
         N[i] = 0;
 
-    // year ¼øÀ¸·Î Á¤·Ä
+    // year ìˆœìœ¼ë¡œ ì •ë ¬
     if (mode == 'y') {
-        // year °³¼ö ÀúÀå À§ÇØ year_N¹è¿­ ¼±¾ğ
+        // year ê°œìˆ˜ ì €ì¥ ìœ„í•´ year_Në°°ì—´ ì„ ì–¸
         int* year_N = new int[k];
         for (int i = 0; i < k; i++) {
             year_N[i] = 0;
         }
 
-        // °¢ Å°ÀÇ °³¼ö ÀúÀå
+        // ê° í‚¤ì˜ ê°œìˆ˜ ì €ì¥
         for (j = 0; j < n; j++) {
-            // A[j] = 2022112313 Çü½Ä
+            // A[j] = 2022112313 í˜•ì‹
             int year = data[j] / 1000000;
             N[year - BASE_YEAR] += 1;
             ::visitCount++;
         }
 
-        // °¢ Å°ÀÇ ´©Àû ÇÕ ÀúÀå
+        // ê° í‚¤ì˜ ëˆ„ì  í•© ì €ì¥
         for (i = 1; i < k; i++) {
             N[i] += N[i - 1];
             year_N[i] = N[i];
             ::visitCount++;
         }
 
-        // Á¤·Ä °á°ú¸¦ ¹è¿­ B¿¡ ÀúÀå
-        // B°¡ year¼øÀ¸·Î Á¤·ÄµÈ ¹è¿­ÀÓ
+        // ì •ë ¬ ê²°ê³¼ë¥¼ ë°°ì—´ Bì— ì €ì¥
+        // Bê°€ yearìˆœìœ¼ë¡œ ì •ë ¬ëœ ë°°ì—´ì„
         for (j = n - 1; j >= 0; j--) {
             int year = data[j] / 1000000;
             result[N[year - BASE_YEAR] - 1] = data[j];
@@ -202,17 +202,16 @@ void CountSort(int data[], int start, int end, int result[], int k, char mode = 
             ::visitCount++;
         }
 
-        // year ´ÜÀ§·Î¸¸ Á¤·ÄµÈ °á°ú Àá½Ã ÀúÀåÇÒ ¹è¿­
+        // year ë‹¨ìœ„ë¡œë§Œ ì •ë ¬ëœ ê²°ê³¼ ì ì‹œ ì €ì¥í•  ë°°ì—´
         int* temp = new int[n];
         for (int i = 0; i < n; i++) {
             temp[i] = result[i];
         }
 
-        // month¿¡ ´ëÇØ °è¼ö Á¤·Ä
+        // í•´ë‹¹ yearì— ì†í•˜ëŠ” ë°ì´í„°ë“¤ì„ monthì— ëŒ€í•´ ê³„ìˆ˜ ì •ë ¬
         int count = 0;
         for (i = 0; i < k; i++) {
             if (year_N[i] != count) {
-                // A, B ¹è¿­ ÀúÀå À§Ä¡?
                 CountSort(temp, count, year_N[i] - 1, result, 12 + 1, 'm');
                 count = year_N[i];
                 ::visitCount++;
@@ -222,21 +221,21 @@ void CountSort(int data[], int start, int end, int result[], int k, char mode = 
         delete[] temp;
     }
     else if (mode == 'm') {
-        // °¢ Å°ÀÇ °³¼ö ÀúÀå
+        // ê° í‚¤ì˜ ê°œìˆ˜ ì €ì¥
         for (j = start; j <= end; j++) {
-            // A[j] = 2022112313 Çü½Ä
+            // A[j] = 2022112313 í˜•ì‹
             int month = (data[j] % 1000000) / 10000;
             N[month] += 1;
             ::visitCount++;
         }
 
-        // °¢ Å°ÀÇ ´©Àû ÇÕ ÀúÀå
+        // ê° í‚¤ì˜ ëˆ„ì  í•© ì €ì¥
         for (i = 1; i < k; i++) {
             N[i] += N[i - 1];
             ::visitCount++;
         }
 
-        // Á¤·Ä °á°ú¸¦ ¹è¿­ B¿¡ ÀúÀå
+        // ì •ë ¬ ê²°ê³¼ë¥¼ ë°°ì—´ Bì— ì €ì¥
         for (j = end; j >= start; j--) {
             int month = (data[j] % 1000000) / 10000;
             result[start + N[month] - 1] = data[j];
@@ -247,7 +246,7 @@ void CountSort(int data[], int start, int end, int result[], int k, char mode = 
     delete[](N);
 }
 
-// »ğÀÔ Á¤·Ä
+// ì‚½ì… ì •ë ¬
 void insertion_sort(int list[], int start, int end) {
     int i, j, key;
 
@@ -316,8 +315,8 @@ void fileWrite(string name, int arr[], int n) {
 
 int main() {
     string arr[MAX_NUMBER];
-    // int n = fileRead("..\\data\\data.txt", arr); // 100°³ µ¥ÀÌÅÍ
-    int n = fileRead("..\\data\\data2.txt", arr); // 1000°³ µ¥ÀÌÅÍ
+    // int n = fileRead("..\\data\\data.txt", arr); // 100ê°œ ë°ì´í„°
+    int n = fileRead("..\\data\\data2.txt", arr); // 1000ê°œ ë°ì´í„°
 
     radix_sort(arr, n, 'h');
     radix_sort(arr, n, 'd');
@@ -332,16 +331,16 @@ int main() {
 
     // quick sort
     int data[10000];
-    // int n = fileRead("..\\data\\data.txt", arr); // 100°³ µ¥ÀÌÅÍ
-    int dataSize = fileRead("..\\data\\data2.txt", arr); // 1000°³ µ¥ÀÌÅÍ
+    // int n = fileRead("..\\data\\data.txt", arr); // 100ê°œ ë°ì´í„°
+    int dataSize = fileRead("..\\data\\data2.txt", arr); // 1000ê°œ ë°ì´í„°
 
-    // yyyy/mm/dd/hh -> ¼ıÀÚ·Î
+    // yyyy/mm/dd/hh -> ìˆ«ìë¡œ
     for (int i = 0; i < dataSize; i++) {
         data[i] = stoi(regex_replace(arr[i], regex("/"), ""));
     }
 
     cout << "Start quick sort..." << endl;
-    int quickSortData[MAX_NUMBER]; // ´Ù¸¥ Á¤·Ä¿¡µµ »ç¿ëÇÏ¹Ç·Î data ¹è¿­À» Á÷Á¢ »ç¿ëÇÏÁö ¾Ê°í »õ·Î¿î ¹è¿­ ¼±¾ğÇÏ¿© »ç¿ë
+    int quickSortData[MAX_NUMBER]; // ë‹¤ë¥¸ ì •ë ¬ì—ë„ ì‚¬ìš©í•˜ë¯€ë¡œ data ë°°ì—´ì„ ì§ì ‘ ì‚¬ìš©í•˜ì§€ ì•Šê³  ìƒˆë¡œìš´ ë°°ì—´ ì„ ì–¸í•˜ì—¬ ì‚¬ìš©
     for (int i = 0; i < dataSize; i++) {
         quickSortData[i] = data[i];
     }
@@ -358,20 +357,20 @@ int main() {
     int countingSortData[MAX_NUMBER];
 
     /*
-        °è¼ö Á¤·Ä ÈÄ »ğÀÔ Á¤·Ä
-        ¸ÕÀú, °è¼ö Á¤·Ä·Î µ¥ÀÌÅÍµéÀ» ¿¬µµ, ¿ù ±âÁØÀ¸·Î °ÅÀÇ Á¤¸® -> ±× ´ÙÀ½ »ğÀÔ Á¤·Ä »ç¿ë
-        µ¥ÀÌÅÍµéÀÌ °ÅÀÇ Á¤·ÄµÈ »óÅÂ¿¡¼­´Â »ğÀÔ Á¤·Ä »ç¿ë À¯¸®
-        (»ğÀÔ Á¤·ÄÀº ÃÖ¾Ç N^2 ÀÌÁö¸¸, ÀÚ·á°¡ ÀÌ¹Ì Á¤·ÄµÈ »óÅÂ¿¡¼­´Â ½Ã°£º¹Àâµµ NÀÓ)
-        (°è¼ö Á¤·Ä·Î ¿¬µµ, ¿ù, ÀÏ, ½Ã°£ °¢°¢ ÀüºÎ Á¤·ÄÇÏ¸é ¸Å¿ì ¸¹Àº ºñ±³È½¼ö¿Í °ø°£ÀÌ ÇÊ¿äÇÏ°í ÀÌ´Â µ¥ÀÌÅÍ°¡ ¸¹¾ÆÁú¼ö·Ï ´õ ¸¹¾ÆÁü)
-        °è¼ö Á¤·Ä°ú »ğÀÔ Á¤·ÄÀ» °°ÀÌ »ç¿ëÇÏ¸é Äü Á¤·Äº¸´Ù ´õ ÀûÀº ºñ±³ È½¼ö°¡ ³ª¿À´Â °ÍÀ» º¼ ¼ö ÀÖÀ½
+        ê³„ìˆ˜ ì •ë ¬ í›„ ì‚½ì… ì •ë ¬
+        ë¨¼ì €, ê³„ìˆ˜ ì •ë ¬ë¡œ ë°ì´í„°ë“¤ì„ ì—°ë„, ì›” ê¸°ì¤€ìœ¼ë¡œ ê±°ì˜ ì •ë¦¬ -> ê·¸ ë‹¤ìŒ ì‚½ì… ì •ë ¬ ì‚¬ìš©
+        ë°ì´í„°ë“¤ì´ ê±°ì˜ ì •ë ¬ëœ ìƒíƒœì—ì„œëŠ” ì‚½ì… ì •ë ¬ ì‚¬ìš© ìœ ë¦¬
+        (ì‚½ì… ì •ë ¬ì€ ìµœì•… N^2 ì´ì§€ë§Œ, ìë£Œê°€ ì´ë¯¸ ì •ë ¬ëœ ìƒíƒœì—ì„œëŠ” ì‹œê°„ë³µì¡ë„ Nì„)
+        (ê³„ìˆ˜ ì •ë ¬ë¡œ ì—°ë„, ì›”, ì¼, ì‹œê°„ ê°ê° ì „ë¶€ ì •ë ¬í•˜ë©´ ë§¤ìš° ë§ì€ ë¹„êµíšŸìˆ˜ì™€ ê³µê°„ì´ í•„ìš”í•˜ê³  ì´ëŠ” ë°ì´í„°ê°€ ë§ì•„ì§ˆìˆ˜ë¡ ë” ë§ì•„ì§)
+        ê³„ìˆ˜ ì •ë ¬ê³¼ ì‚½ì… ì •ë ¬ì„ ê°™ì´ ì‚¬ìš©í•˜ë©´ í€µ ì •ë ¬ë³´ë‹¤ ë” ì ì€ ë¹„êµ íšŸìˆ˜ê°€ ë‚˜ì˜¤ëŠ” ê²ƒì„ ë³¼ ìˆ˜ ìˆìŒ
     */
-    CountSort(data, 0, dataSize - 1, countingSortData, 100, 'y'); // data ¹è¿­À» Á¤·ÄÇÏ¿© countingSortData¹è¿­¿¡ ÀúÀå
-    insertion_sort(countingSortData, 0, dataSize - 1); // ¿¬µµ, ¿ù ±âÁØÀ¸·Î¸¸ Á¤·ÄµÈ countingSortData¹è¿­À» ´Ù½Ã Á¤·Ä
+    CountSort(data, 0, dataSize - 1, countingSortData, 100, 'y'); // data ë°°ì—´ì„ ì •ë ¬í•˜ì—¬ countingSortDataë°°ì—´ì— ì €ì¥
+    insertion_sort(countingSortData, 0, dataSize - 1); // ì—°ë„, ì›” ê¸°ì¤€ìœ¼ë¡œë§Œ ì •ë ¬ëœ countingSortDataë°°ì—´ì„ ë‹¤ì‹œ ì •ë ¬
 
     fileWrite("..\\result\\CountingSortResult.txt", countingSortData, dataSize);
 
     cout << "End counting sort" << endl;
-    // »ğÀÔ Á¤·Ä¿¡¼­ÀÇ ºñ±³ È½¼ö(compareCount) + °è¼ö Á¤·Ä¿¡¼­ÀÇ »õ·Î¿î ¹è¿­À» »ı¼ºÇÒ ¶§ µ¥ÀÌÅÍ¸¦ ¼øÈ¸ÇÑ È½¼ö(visitCount)
+    // ì‚½ì… ì •ë ¬ì—ì„œì˜ ë¹„êµ íšŸìˆ˜(compareCount) + ê³„ìˆ˜ ì •ë ¬ì—ì„œì˜ ìƒˆë¡œìš´ ë°°ì—´ì„ ìƒì„±í•  ë•Œ ë°ì´í„°ë¥¼ ìˆœíšŒí•œ íšŸìˆ˜(visitCount)
     cout << "Compare count: " << ::compareCount + ::visitCount << endl << endl;
     ::compareCount = 0;
 
